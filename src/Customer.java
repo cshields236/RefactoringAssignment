@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Customer {
@@ -108,6 +110,232 @@ public class Customer {
     public void setAccounts(ArrayList<CustomerAccount> accounts)
     {
         this.accounts = accounts;
+    }
+
+
+    public void addCustomer(JFrame f1, JFrame f, ArrayList<Customer> customerList, String CustomerID){
+        f1.dispose();
+        Menu m = new Menu();
+
+        boolean loop = true;
+        while(loop){
+            password = JOptionPane.showInputDialog(f, "Enter 7 character Password;");
+
+            if(password.length() != 7)//Making sure password is 7 characters
+            {
+                JOptionPane.showMessageDialog(null, null, "Password must be 7 charatcers long", JOptionPane.OK_OPTION);
+            }
+            else
+            {
+                loop = false;
+            }
+        }
+
+        ArrayList<CustomerAccount> accounts = new ArrayList<CustomerAccount> ();
+        Customer customer = new Customer(PPS, surname, firstName, DOB, CustomerID, password, accounts);
+
+        customerList.add(customer);
+
+        JOptionPane.showMessageDialog(f, "CustomerID = " + CustomerID +"\n Password = " + password  ,"Customer created.",  JOptionPane.INFORMATION_MESSAGE);
+        m.menuStart();
+        f.dispose();
+    }
+
+    public void viewAccount(JFrame f, ArrayList<Customer> customerList){
+        Menu m = new Menu();
+        Customer customer = new Customer();
+        f.dispose();
+
+        if(customerList.isEmpty())
+        {
+            JOptionPane.showMessageDialog(f, "There are no customers yet!"  ,"Oops!",  JOptionPane.INFORMATION_MESSAGE);
+            f.dispose();
+            m.admin();
+        }
+        else
+        {
+            boolean loop = true;
+
+            boolean found = false;
+
+            while(loop)
+            {
+                Object customerID = JOptionPane.showInputDialog(f, "Customer ID of Customer You Wish to Add an Account to:");
+
+                for (Customer aCustomer: customerList){
+
+                    if(aCustomer.getCustomerID().equals(customerID))
+                    {
+                        found = true;
+                        customer = aCustomer;
+                    }
+                }
+
+                if(found == false)
+                {
+                    int reply  = JOptionPane.showConfirmDialog(null, null, "User not found. Try again?", JOptionPane.YES_NO_OPTION);
+                    if (reply == JOptionPane.YES_OPTION) {
+                        loop = true;
+                    }
+                    else if(reply == JOptionPane.NO_OPTION)
+                    {
+                        f.dispose();
+                        loop = false;
+
+                        m.admin();
+                    }
+                }
+                else
+                {
+                    loop = false;
+                    //a combo box in an dialog box that asks the admin what type of account they wish to create (deposit/current)
+                    String[] choices = { "Current Account", "Deposit Account" };
+                    String account = (String) JOptionPane.showInputDialog(null, "Please choose account type",
+                            "Account Type", JOptionPane.QUESTION_MESSAGE, null, choices, choices[1]);
+
+                    if(account.equals("Current Account"))
+                    {
+                        //create current account
+                        boolean valid = true;
+                        double balance = 0;
+                        String number = String.valueOf("C" + (customerList.indexOf(customer)+1) * 10 + (customer.getAccounts().size()+1));//this simple algorithm generates the account number
+                        ArrayList<AccountTransaction> transactionList = new ArrayList<AccountTransaction>();
+                        int randomPIN = (int)(Math.random()*9000)+1000;
+                        String pin = String.valueOf(randomPIN);
+
+                        ATMCard atm = new ATMCard(randomPIN, valid);
+
+                        CustomerCurrentAccount current = new CustomerCurrentAccount(atm, number, balance, transactionList);
+
+                        customer.getAccounts().add(current);
+                        JOptionPane.showMessageDialog(f, "Account number = " + number +"\n PIN = " + pin  ,"Account created.",  JOptionPane.INFORMATION_MESSAGE);
+
+                        f.dispose();
+                        m.admin();
+                    }
+
+                    if(account.equals("Deposit Account"))
+                    {
+                        //create deposit account
+
+                        double balance = 0, interest = 0;
+                        String number = String.valueOf("D" + (customerList.indexOf(customer)+1) * 10 + (customer.getAccounts().size()+1));//this simple algorithm generates the account number
+                        ArrayList<AccountTransaction> transactionList = new ArrayList<AccountTransaction>();
+
+                        CustomerDepositAccount deposit = new CustomerDepositAccount(interest, number, balance, transactionList);
+
+                        customer.getAccounts().add(deposit);
+                        JOptionPane.showMessageDialog(f, "Account number = " + number ,"Account created.",  JOptionPane.INFORMATION_MESSAGE);
+
+                        f.dispose();
+                        m.admin();
+                    }
+
+                }
+            }
+        }
+    }
+
+    public void deleteCustomer(JFrame f, ArrayList<Customer> customerList){
+        Customer customer = new Customer();
+        Menu m = new Menu();
+        boolean found = true, loop = true;
+
+        if (customerList.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "There are currently no customers to display. ");
+            m.dispose();
+            m.admin();
+        } else {
+            {
+                Object customerID = JOptionPane.showInputDialog(f, "Customer ID of Customer You Wish to Delete:");
+
+                for (Customer aCustomer : customerList) {
+
+                    if (aCustomer.getCustomerID().equals(customerID)) {
+                        found = true;
+                        customer = aCustomer;
+                        loop = false;
+                    }
+                }
+
+                if (found == false) {
+                    int reply = JOptionPane.showConfirmDialog(null, null, "User not found. Try again?", JOptionPane.YES_NO_OPTION);
+                    if (reply == JOptionPane.YES_OPTION) {
+                        loop = true;
+                    } else if (reply == JOptionPane.NO_OPTION) {
+                        f.dispose();
+                        loop = false;
+
+                        m.admin();
+                    }
+                } else {
+                    if (customer.getAccounts().size() > 0) {
+                        JOptionPane.showMessageDialog(f, "This customer has accounts. \n You must delete a customer's accounts before deleting a customer ", "Oops!", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        customerList.remove(customer);
+                        JOptionPane.showMessageDialog(f, "Customer Deleted ", "Success.", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+
+
+            }
+        }
+    }
+
+    public void getAtPosition(ArrayList<Customer> customerList, int position, JTextField firstNameTextField, JTextField surnameTextField, JTextField pPSTextField, JTextField dOBTextField, JTextField customerIDTextField, JTextField passwordTextField, String type){
+        if(type.equals("next")){
+            if (position == customerList.size() - 1) {
+                //don't do anything
+            } else {
+                position = position + 1;
+
+                firstNameTextField.setText(customerList.get(position).getFirstName());
+                surnameTextField.setText(customerList.get(position).getSurname());
+                pPSTextField.setText(customerList.get(position).getPPS());
+                dOBTextField.setText(customerList.get(position).getDOB());
+                customerIDTextField.setText(customerList.get(position).getCustomerID());
+                passwordTextField.setText(customerList.get(position).getPassword());
+            }
+        }
+        else if(type.equals("previous")){
+            if (position < 1) {
+                //don't do anything
+            } else {
+                position = position - 1;
+
+                firstNameTextField.setText(customerList.get(position).getFirstName());
+                surnameTextField.setText(customerList.get(position).getSurname());
+                pPSTextField.setText(customerList.get(position).getPPS());
+                dOBTextField.setText(customerList.get(position).getDOB());
+                customerIDTextField.setText(customerList.get(position).getCustomerID());
+                passwordTextField.setText(customerList.get(position).getPassword());
+            }
+
+        }
+        else if(type.equals("first")){
+            if (position < 1) {
+                //don't do anything
+            } else {
+                position = position - 1;
+
+                firstNameTextField.setText(customerList.get(position).getFirstName());
+                surnameTextField.setText(customerList.get(position).getSurname());
+                pPSTextField.setText(customerList.get(position).getPPS());
+                dOBTextField.setText(customerList.get(position).getDOB());
+                customerIDTextField.setText(customerList.get(position).getCustomerID());
+                passwordTextField.setText(customerList.get(position).getPassword());
+            }
+        }
+        else if(type.equals("last")){
+            position = customerList.size() - 1;
+
+            firstNameTextField.setText(customerList.get(position).getFirstName());
+            surnameTextField.setText(customerList.get(position).getSurname());
+            pPSTextField.setText(customerList.get(position).getPPS());
+            dOBTextField.setText(customerList.get(position).getDOB());
+            customerIDTextField.setText(customerList.get(position).getCustomerID());
+            passwordTextField.setText(customerList.get(position).getPassword());
+        }
     }
 
     public String toString()
