@@ -257,7 +257,7 @@ public class Customer {
     }
 
 
-    public void EditCustomer(JFrame f, ArrayList<Customer> customerList) {
+    public void editCustomer(JFrame f, ArrayList<Customer> customerList) {
         boolean loop = true;
         Menu m = new Menu();
         boolean found = false;
