@@ -154,15 +154,7 @@ public class Customer {
                 }
 
                 if (found == false) {
-                    int reply = JOptionPane.showConfirmDialog(null, null, "User not found. Try again?", JOptionPane.YES_NO_OPTION);
-                    if (reply == JOptionPane.YES_OPTION) {
-                        loop = true;
-                    } else if (reply == JOptionPane.NO_OPTION) {
-                        f.dispose();
-                        loop = false;
-
-                        m.admin();
-                    }
+                    JOptionPane.showConfirmDialog(null, null, "User not found", JOptionPane.ERROR_MESSAGE);
                 } else {
                     loop = false;
                     //a combo box in an dialog box that asks the admin what type of account they wish to create (deposit/current)

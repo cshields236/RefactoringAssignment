@@ -153,7 +153,7 @@ public class MenuMethods {
         }
     }
 
-    public void selectCustomer(JFrame f,  ArrayList<Customer> customerList) {
+    public void selectCustomer(JFrame f, ArrayList<Customer> customerList) {
         boolean loop = true, loop2 = true;
         boolean cont = false;
         boolean found = false;
@@ -171,15 +171,9 @@ public class MenuMethods {
             }
 
             if (found == false) {
-                int reply = JOptionPane.showConfirmDialog(null, null, "User not found. Try again?", JOptionPane.YES_NO_OPTION);
-                if (reply == JOptionPane.YES_OPTION) {
-                    loop = true;
-                } else if (reply == JOptionPane.NO_OPTION) {
-                    f.dispose();
-                    loop = false;
-                    loop2 = false;
-                    m.menuStart();
-                }
+                JOptionPane.showMessageDialog(null, null, "User not found", JOptionPane.ERROR_MESSAGE);
+                loop = false;
+                loop2 = false;
             } else {
                 loop = false;
             }

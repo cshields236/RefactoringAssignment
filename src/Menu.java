@@ -383,15 +383,8 @@ public class Menu extends JFrame {
                     }
 
                     if (found == false) {
-                        int reply = JOptionPane.showConfirmDialog(null, null, "User not found. Try again?", JOptionPane.YES_NO_OPTION);
-                        if (reply == JOptionPane.YES_OPTION) {
-                            loop = true;
-                        } else if (reply == JOptionPane.NO_OPTION) {
-                            f.dispose();
-                            loop = false;
+                        JOptionPane.showConfirmDialog(null, null, "User not found", JOptionPane.ERROR_MESSAGE);
 
-                            admin();
-                        }
                     } else {
                         //Here I would make the user select a an account to delete from a combo box. If the account had a balance of 0 then it would be deleted. (I do not have time to do this)
                     }
