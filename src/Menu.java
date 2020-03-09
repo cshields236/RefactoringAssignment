@@ -5,8 +5,6 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-import java.util.Date;
-
 public class Menu extends JFrame {
 
     private ArrayList<Customer> customerList = new ArrayList<Customer>();
@@ -20,7 +18,7 @@ public class Menu extends JFrame {
     JLabel customerIDLabel, passwordLabel;
     JTextField customerIDTextField, passwordTextField;
     Container content;
-    Customer c;
+    Customer cust;
 
 
     public static void main(String[] args) {
@@ -164,14 +162,14 @@ public class Menu extends JFrame {
         BankAdministration administration = new BankAdministration();
         bankChargesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                administration.bankCharges(acc, customerList, f, c);
+                administration.bankCharges(acc, customerList, f, cust);
 
             }
         });
 
         interestButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                administration.bankInterest(acc, customerList, f, c);
+                administration.bankInterest(acc, customerList, f, cust);
 
             }
         });
@@ -181,7 +179,7 @@ public class Menu extends JFrame {
                 if (customerList.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "There are currently no customers to display. ");
                 } else {
-                    c.editCustomer(f, customerList);
+                    cust.editCustomer(f, customerList);
                 }
             }
         });
@@ -350,7 +348,7 @@ public class Menu extends JFrame {
                 if (customerList.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "There are currently no customers to display. ");
                 } else {
-                    c.addCustomer(f1, f, customerList, "1235");
+                    cust.addCustomer(f1, f, customerList, "1235");
                 }
             }
         });
@@ -358,7 +356,7 @@ public class Menu extends JFrame {
         deleteCustomer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 if (!customerList.isEmpty()){
-                c.deleteCustomer(f, customerList);}
+                cust.deleteCustomer(f, customerList);}
                 else{
                     JOptionPane.showMessageDialog(null, "There are currently no customers to display. ");
                 }
@@ -367,7 +365,7 @@ public class Menu extends JFrame {
 
         deleteAccount.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                boolean found = true, loop = true;
+                boolean found = true;
 
 
                 {
@@ -378,7 +376,7 @@ public class Menu extends JFrame {
                         if (aCustomer.getCustomerID().equals(customerID)) {
                             found = true;
                             customer = aCustomer;
-                            loop = false;
+
                         }
                     }
 
@@ -404,7 +402,7 @@ public class Menu extends JFrame {
 
     public void customer(Customer e1) {
         f = new JFrame("Customer Menu");
-        e1 = c;
+        e1 = cust;
         f.setSize(400, 300);
         f.setLocation(200, 200);
         f.addWindowListener(new WindowAdapter() {
@@ -414,7 +412,7 @@ public class Menu extends JFrame {
         });
         f.setVisible(true);
 
-        if (c.getAccounts().size() == 0) {
+        if (cust.getAccounts().size() == 0) {
             JOptionPane.showMessageDialog(f, "This customer does not have any accounts yet. \n An admin must create an account for this customer \n for them to be able to use customer functionality. ", "Oops!", JOptionPane.INFORMATION_MESSAGE);
             f.dispose();
             menuStart();
@@ -432,14 +430,14 @@ public class Menu extends JFrame {
             buttonPanel.add(continueButton);
 
             JComboBox<String> box = new JComboBox<String>();
-            for (int i = 0; i < c.getAccounts().size(); i++) {
-                box.addItem(c.getAccounts().get(i).getNumber());
+            for (int i = 0; i < cust.getAccounts().size(); i++) {
+                box.addItem(cust.getAccounts().get(i).getNumber());
             }
 
 
-            for (int i = 0; i < c.getAccounts().size(); i++) {
-                if (c.getAccounts().get(i).getNumber() == box.getSelectedItem()) {
-                    acc = c.getAccounts().get(i);
+            for (int i = 0; i < cust.getAccounts().size(); i++) {
+                if (cust.getAccounts().get(i).getNumber() == box.getSelectedItem()) {
+                    acc = cust.getAccounts().get(i);
                 }
             }
 
@@ -513,7 +511,7 @@ public class Menu extends JFrame {
 
                                     acc.statement(acc, f, content);
                                     f.dispose();
-                                    customer(c);
+                                    customer(cust);
                                 }
                             });
                         }
