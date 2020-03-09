@@ -12,7 +12,7 @@ public class Menu extends JFrame {
     private ArrayList<Customer> customerList = new ArrayList<Customer>();
     private int position = 0;
     private String password;
-    private Customer customer = null;
+    private Customer customer;
     private CustomerAccount acc = new CustomerAccount();
     JFrame f, f1;
     JLabel firstNameLabel, surnameLabel, pPPSLabel, dOBLabel;
@@ -23,11 +23,6 @@ public class Menu extends JFrame {
     Customer c;
 
 
-//    MenuMethods methods = new MenuMethods();
-    JPanel panel2;
-    JButton add;
-    String PPS, firstName, surname, DOB, CustomerID;
-
     public static void main(String[] args) {
         Menu driver = new Menu();
         driver.menuStart();
@@ -36,8 +31,6 @@ public class Menu extends JFrame {
     public void menuStart() {
 		   /*The menuStart method asks the user if they are a new customer, an existing customer or an admin. It will then start the create customer process
 		  if they are a new customer, or will ask them to log in if they are an existing customer or admin.*/
-
-
         f = new JFrame("User Type");
         f.setSize(400, 300);
         f.setLocation(200, 200);
@@ -78,7 +71,7 @@ public class Menu extends JFrame {
                 String user = userType.getSelection().getActionCommand();
                 // Switch case to check customer selection and launch chosen method
                 switch (user) {
-                    case "New Customer ":
+                    case "New Customer":
                         methods.createNewCustomer(f, customerList);
                         break;
                     case "Administrator":
@@ -191,67 +184,7 @@ public class Menu extends JFrame {
 
         summaryButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                f.dispose();
-
-
-                f = new JFrame("Summary of Transactions");
-                f.setSize(400, 700);
-                f.setLocation(200, 200);
-                f.addWindowListener(new WindowAdapter() {
-                    public void windowClosing(WindowEvent we) {
-                        System.exit(0);
-                    }
-                });
-                f.setVisible(true);
-
-                JLabel label1 = new JLabel("Summary of all transactions: ");
-
-                JPanel returnPanel = new JPanel();
-                JButton returnButton = new JButton("Return");
-                returnPanel.add(returnButton);
-
-                JPanel textPanel = new JPanel();
-
-                textPanel.setLayout(new BorderLayout());
-                JTextArea textArea = new JTextArea(40, 20);
-                textArea.setEditable(false);
-                textPanel.add(label1, BorderLayout.NORTH);
-                textPanel.add(textArea, BorderLayout.CENTER);
-                textPanel.add(returnButton, BorderLayout.SOUTH);
-
-                JScrollPane scrollPane = new JScrollPane(textArea);
-                textPanel.add(scrollPane);
-
-                for (int a = 0; a < customerList.size(); a++)//For each customer, for each account, it displays each transaction.
-                {
-                    for (int b = 0; b < customerList.get(a).getAccounts().size(); b++) {
-                        acc = customerList.get(a).getAccounts().get(b);
-                        for (int c = 0; c < customerList.get(a).getAccounts().get(b).getTransactionList().size(); c++) {
-
-                            textArea.append(acc.getTransactionList().get(c).toString());
-                            //Int total = acc.getTransactionList().get(c).getAmount(); //I was going to use this to keep a running total but I couldnt get it  working.
-
-                        }
-                    }
-                }
-
-
-                textPanel.add(textArea);
-                content.removeAll();
-
-
-                Container content = f.getContentPane();
-                content.setLayout(new GridLayout(1, 1));
-                //	content.add(label1);
-                content.add(textPanel);
-                //content.add(returnPanel);
-
-                returnButton.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent ae) {
-                        f.dispose();
-                        admin();
-                    }
-                });
+                acc.summary(f, customerList, acc, content);
             }
         });
 

@@ -34,6 +34,7 @@ public class MenuMethods {
         JTextField pPSTextField = new JTextField(20);
         JTextField dOBTextField = new JTextField(20);
         JPanel panel = new JPanel(new GridLayout(6, 2));
+        f1.setVisible(true);
         panel.add(firstNameLabel);
         panel.add(firstNameTextField);
         panel.add(surnameLabel);
