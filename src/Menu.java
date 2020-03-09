@@ -13,7 +13,7 @@ public class Menu extends JFrame {
     private int position = 0;
     private String password;
     private Customer customer;
-    private CustomerAccount acc = new CustomerAccount();
+    CustomerAccount acc = new CustomerAccount();
     JFrame f, f1;
     JLabel firstNameLabel, surnameLabel, pPPSLabel, dOBLabel;
     JTextField firstNameTextField, surnameTextField, pPSTextField, dOBTextField;
@@ -164,7 +164,7 @@ public class Menu extends JFrame {
         BankAdministration administration = new BankAdministration();
         bankChargesButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-            administration.bankCharges(acc, customerList, f, c);
+                administration.bankCharges(acc, customerList, f, c);
 
             }
         });
@@ -178,7 +178,11 @@ public class Menu extends JFrame {
 
         editCustomerButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                c.editCustomer(f, customerList);
+                if (customerList.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "There are currently no customers to display. ");
+                } else {
+                    c.editCustomer(f, customerList);
+                }
             }
         });
 
@@ -343,13 +347,21 @@ public class Menu extends JFrame {
 
         accountButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                c.viewAccount(f, customerList);
+                if (customerList.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "There are currently no customers to display. ");
+                } else {
+                    c.addCustomer(f1, f, customerList, "1235");
+                }
             }
         });
 
         deleteCustomer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                c.deleteCustomer(f, customerList);
+                if (!customerList.isEmpty()){
+                c.deleteCustomer(f, customerList);}
+                else{
+                    JOptionPane.showMessageDialog(null, "There are currently no customers to display. ");
+                }
             }
         });
 

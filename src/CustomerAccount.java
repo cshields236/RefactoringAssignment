@@ -13,7 +13,7 @@ public class CustomerAccount  {
     String number;
     double balance;
     ArrayList<AccountTransaction> transactionList = new ArrayList<AccountTransaction>();
-    Menu m = new Menu();
+
     //Blank Constructor
     public CustomerAccount()
     {
@@ -116,7 +116,7 @@ public class CustomerAccount  {
     public void summary(JFrame f, ArrayList<Customer> customerList, CustomerAccount acc, Container container){
         f.dispose();
 
-
+        Menu m = new Menu();
         f = new JFrame("Summary of Transactions");
         f.setSize(400, 700);
         f.setLocation(200, 200);

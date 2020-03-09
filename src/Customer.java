@@ -16,6 +16,7 @@ public class Customer {
     String customerID = "";
     String password = "";
 
+    Menu m = new Menu();
     ArrayList<CustomerAccount> accounts = new ArrayList<CustomerAccount>();
 
     //Blank constructor
@@ -128,7 +129,7 @@ public class Customer {
     }
 
     public void viewAccount(JFrame f, ArrayList<Customer> customerList) {
-        Menu m = new Menu();
+
         Customer customer = new Customer();
         f.dispose();
 
